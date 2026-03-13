@@ -144,7 +144,7 @@ export default function Register() {
           onClick={register}
           disabled={isLoading}
         >
-          Entrar
+          Registrar
         </Button>
          {errors.request && <p className={'text-red-500'}>{errors.request}</p>}
         <p>
