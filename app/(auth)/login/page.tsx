@@ -11,7 +11,7 @@ export default function Login() {
   return (
     <main className={'h-screen w-screen flex items-center justify-center bg-background'}>
       <div className={'p-12 flex flex-col items-center justify-center rounded-lg bg-white gap-4 w-1/4'}>
-        <h1 className={'text-2xl self-start font-bold mb-12'}>
+        <h1 className={'text-2xl self-start font-bold'}>
           Login
         </h1>
 
