@@ -1,20 +1,26 @@
 'use client'
 
 import { useContext, useEffect } from "react"
-import { AuthContext } from "./_contexts"
+import { AuthContext } from "../_contexts"
+import { UserTypesEnum } from "../types";
 import { useRouter } from "next/navigation";
 import { Fab } from "@mui/material";
 
-export default function Home() {
+export default function Admin() {
   const router = useRouter();
-
   const { authLoaded, user, cleanToken } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!authLoaded) return;
+
     if (authLoaded && !user) {
-      router.push('/login')
+      router.push('/login');
     }
-  }, [authLoaded, user])
+
+    if (user?.roleId !== UserTypesEnum.BARBER) {
+      router.push('../');
+    }
+  }, [user, authLoaded])
 
   const logout = () => {
     cleanToken();
@@ -27,7 +33,7 @@ export default function Home() {
     <div
       className={"relative block w-screen h-screen"}
     >
-      <h1>Tela do Cliente</h1>
+      <h1>Tela do Admin</h1>
       <Fab
         color="primary"
         variant={'extended'}
