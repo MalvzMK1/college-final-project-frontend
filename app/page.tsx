@@ -1,5 +1,3 @@
 export default function Home() {
-  return (
-    'something'
-  );
+  return <h1>Tela do Cliente</h1>
 }
