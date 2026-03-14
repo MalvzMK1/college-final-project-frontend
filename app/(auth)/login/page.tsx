@@ -71,12 +71,13 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (response) {
-      if (response.data?.userTypeId === UserTypesEnum.BARBER) {
-        authContext.registerToken(response.data.token);
-        router.push('../../admin/');
+    if (response?.data) {
+      authContext.registerToken(response.data.token);
+
+      if (response.data.userTypeId === UserTypesEnum.BARBER) {
+        router.push('/admin');
       } else {
-        router.push('../../');
+        router.push('/');
       }
     } else if (error) {
       setErrors({
