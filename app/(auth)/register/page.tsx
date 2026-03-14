@@ -66,7 +66,6 @@ export default function Register() {
 
   function register() {
     const areInputsValid = validateInputs();
-    console.log(areInputsValid)
 
     if (!areInputsValid) return;
 
@@ -89,10 +88,6 @@ export default function Register() {
       });
     }
   }, [response, error, isLoading])
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors])
 
   return (
     <main className={'h-screen w-screen flex items-center justify-center bg-background'}>
@@ -146,7 +141,7 @@ export default function Register() {
         >
           Registrar
         </Button>
-         {errors.request && <p className={'text-red-500'}>{errors.request}</p>}
+        {errors.request && <p className={'text-red-500'}>{errors.request}</p>}
         <p>
           Já tem uma conta?
           <Link 
