@@ -17,7 +17,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* *, *::before, *::after {
+*, *::before, *::after {
   outline: none;
   box-sizing: border-box;
 }

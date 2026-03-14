@@ -5,8 +5,8 @@ export function getCookie(key: string): string | null {
   for (const cookie of cookies) {
     const [cookieKey, value] = cookie.split('=');
 
-    if (cookieKey === key) {
-      return value;
+    if (cookieKey.trim() === key) {
+      return value.trim();
     }
   }
 
