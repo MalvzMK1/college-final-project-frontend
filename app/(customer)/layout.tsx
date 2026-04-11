@@ -1,7 +1,6 @@
 import {
   Stack,
 } from "@mui/material";
-import { AuthenticatedUser } from "../types";
 import Navbar from "./_components/navbar";
 
 export default function CustomerLayout({
@@ -25,7 +24,4 @@ export default function CustomerLayout({
       {children}
     </Stack>
   )
-}
-function useEffect(arg0: () => void, arg1: (boolean | AuthenticatedUser | null)[]) {
-    throw new Error("Function not implemented.");
 }
