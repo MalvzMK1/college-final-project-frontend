@@ -3,12 +3,11 @@
 import { useContext, useEffect } from "react"
 import { AuthContext } from "./_contexts"
 import { useRouter } from "next/navigation";
-import { Fab } from "@mui/material";
 
 export default function Home() {
   const router = useRouter();
 
-  const { authLoaded, user, cleanToken } = useContext(AuthContext);
+  const { authLoaded, user } = useContext(AuthContext);
 
   useEffect(() => {
     if (authLoaded && !user) {
@@ -16,27 +15,12 @@ export default function Home() {
     }
   }, [authLoaded, user])
 
-  const logout = () => {
-    cleanToken();
-    router.push('/login');
-  }
-
   if (!user) return <></>
 
   return (
-    <div
-      className={"relative block w-screen h-screen"}
-    >
-      <h1>Tela do Cliente</h1>
-      <Fab
-        color="primary"
-        variant={'extended'}
-        size={'large'}
-        aria-label="logout"
-        style={{position: "absolute"}}
-        className={"right-4 top-4"}
-        onClick={logout}
-      >Logout</Fab>
-    </div>
+    <main className="h-screen w-full bg-background p-6 flex flex-col gap-4 overflow-y-auto">
+      <h1 className="text-3xl font-bold text-white">Tela do Cliente</h1>
+      <p className="text-gray-300">Bem-vindo ao sistema de gerenciamento de barbearia.</p>
+    </main>
   )
 }

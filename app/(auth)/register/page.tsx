@@ -90,10 +90,10 @@ export default function Register() {
   }, [response, error, isLoading])
 
   return (
-    <main className={'h-screen w-screen flex items-center justify-center bg-background'}>
+    <main className={'h-screen w-full flex items-center justify-center bg-background'}>
       {isLoading && <LoadingMask />}
 
-      <div className={'p-12 flex flex-col items-center justify-center rounded-lg bg-white gap-4 w-1/4'}>
+      <div className={'p-12 flex flex-col items-center justify-center rounded-lg bg-white gap-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4'}>
         <h1 className={'text-2xl self-end font-bold'}>
           Cadastro
         </h1>
