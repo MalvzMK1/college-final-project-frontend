@@ -1,5 +1,14 @@
 import axios from "axios";
-import { GetAllUsersParams, GetAllUsersResponse, PatchTurnUserIntoBarber, PostUserLoginBody, PostUserLoginResponse, PostUserRegisterBody } from "./types";
+import {
+    CreateAppointmentBody,
+  GetAllUsersParams,
+  GetAllUsersResponse,
+  GetAvailableHoursResponse,
+  PatchTurnUserIntoBarber,
+  PostUserLoginBody,
+  PostUserLoginResponse,
+  PostUserRegisterBody,
+} from "./types";
 import { HttpResponse } from "@/app/types";
 import { getCookie } from "../../_utils";
 
@@ -41,4 +50,20 @@ export const patchTurnUserIntoBarber = ({ userId }: PatchTurnUserIntoBarber) => 
       Authorization: getToken(),
     },
   });
+}
+
+export const getAvailableHours = () => {
+  return axios.get<HttpResponse<GetAvailableHoursResponse>>(apiBaseUrl + '/customer/available-hours', {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const postCreateAppointment = (data: CreateAppointmentBody) => {
+  return axios.post(apiBaseUrl + '/customer/appointment', data, {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
 }

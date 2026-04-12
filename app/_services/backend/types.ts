@@ -37,3 +37,21 @@ export interface GetAllUsersResponse {
 export interface PatchTurnUserIntoBarber {
   userId: string;
 }
+
+export interface GetAvailableHoursResponse {
+  days: {
+    hours: {
+      datetime: Date;
+      isAvailable: boolean;
+      availableBarbers: {
+        id: string;
+        name: string;
+      }[];
+    }[]
+  }[]
+}
+
+export interface CreateAppointmentBody {
+  barberId: string;
+  dateTime: Date;
+}
