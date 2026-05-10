@@ -1,4 +1,4 @@
-import { UserTypesEnum } from "@/app/types";
+import { AppointmentStatusEnum, UserTypesEnum } from "@/app/types";
 
 export interface PostUserLoginBody {
   email: string;
@@ -54,4 +54,21 @@ export interface GetAvailableHoursResponse {
 export interface CreateAppointmentBody {
   barberId: string;
   dateTime: Date;
+}
+
+export interface UpdateScheduleStatusInput {
+  barberId: string;
+  appointmentId: number;
+  statusId: AppointmentStatusEnum;
+}
+
+export interface GetWeekAppointmentsResponse {
+  id: number;
+  note: string | null;
+  dateTime: Date;
+  customerName: string;
+  status: {
+    id: number;
+    name: string;
+  } | null;
 }

@@ -1,13 +1,15 @@
 import axios from "axios";
 import {
-    CreateAppointmentBody,
+  CreateAppointmentBody,
   GetAllUsersParams,
   GetAllUsersResponse,
   GetAvailableHoursResponse,
+  GetWeekAppointmentsResponse,
   PatchTurnUserIntoBarber,
   PostUserLoginBody,
   PostUserLoginResponse,
   PostUserRegisterBody,
+  UpdateScheduleStatusInput,
 } from "./types";
 import { HttpResponse } from "@/app/types";
 import { getCookie } from "../../_utils";
@@ -16,6 +18,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 function getToken(): string {
   const token = getCookie('shaveup_access_token');
+
   return token ? `Bearer ${token}` : '';
 }
 
@@ -27,7 +30,7 @@ export const postUserRegister = (userObj: PostUserRegisterBody) => {
   return axios.post(apiBaseUrl + '/auth/register', userObj);
 };
 
-export const getAllUsers = ({ 
+export const getAllUsers = ({
   skip = 0,
   take = 20,
   ...params
@@ -62,6 +65,23 @@ export const getAvailableHours = () => {
 
 export const postCreateAppointment = (data: CreateAppointmentBody) => {
   return axios.post(apiBaseUrl + '/customer/appointment', data, {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const patchUpdateScheduleStatus = ({ appointmentId, statusId }: UpdateScheduleStatusInput) => {
+  return axios.patch(apiBaseUrl + `/admin/appointment/${appointmentId}/status`, { statusId }, {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const getWeekAppointments = (date?: string) => {
+  return axios.get<HttpResponse<GetWeekAppointmentsResponse[]>>(apiBaseUrl + `/admin/appointment/week`, {
+    params: date ? { date } : undefined,
     headers: {
       Authorization: getToken(),
     }
