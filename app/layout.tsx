@@ -16,9 +16,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
         <AppRouterCacheProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+          </Providers>
         </AppRouterCacheProvider>
       </body>
     </html>

@@ -1,8 +1,27 @@
 import axios from "axios";
-import { PostUserLoginBody, PostUserLoginResponse, PostUserRegisterBody } from "./types";
+import {
+  CreateAppointmentBody,
+  GetAllUsersParams,
+  GetAllUsersResponse,
+  GetAvailableHoursResponse,
+  GetLastAppointmentsOutputDTO,
+  GetWeekAppointmentsResponse,
+  PatchTurnUserIntoBarber,
+  PostUserLoginBody,
+  PostUserLoginResponse,
+  PostUserRegisterBody,
+  UpdateScheduleStatusInput,
+} from "./types";
 import { HttpResponse } from "@/app/types";
+import { getCookie } from "../../_utils";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+function getToken(): string {
+  const token = getCookie('shaveup_access_token');
+
+  return token ? `Bearer ${token}` : '';
+}
 
 export const postUserLogin = (userObj: PostUserLoginBody) => {
   return axios.post<HttpResponse<PostUserLoginResponse>>(apiBaseUrl + '/auth/login', userObj);
@@ -11,3 +30,77 @@ export const postUserLogin = (userObj: PostUserLoginBody) => {
 export const postUserRegister = (userObj: PostUserRegisterBody) => {
   return axios.post(apiBaseUrl + '/auth/register', userObj);
 };
+
+export const getAllUsers = ({
+  skip = 0,
+  take = 20,
+  ...params
+}: GetAllUsersParams) => {
+  return axios.get<HttpResponse<GetAllUsersResponse>>(apiBaseUrl + '/admin/user', {
+    params: {
+      ...params,
+      skip,
+      take,
+    },
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const patchTurnUserIntoBarber = ({ userId }: PatchTurnUserIntoBarber) => {
+  return axios.patch(apiBaseUrl + `/admin/user/${userId}/turn-into-barber`, {}, {
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+}
+
+export const getAvailableHours = () => {
+  return axios.get<HttpResponse<GetAvailableHoursResponse>>(apiBaseUrl + '/customer/available-hours', {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const postCreateAppointment = (data: CreateAppointmentBody) => {
+  return axios.post(apiBaseUrl + '/customer/appointment', data, {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const patchUpdateScheduleStatus = ({ appointmentId, statusId }: UpdateScheduleStatusInput) => {
+  return axios.patch(apiBaseUrl + `/admin/appointment/${appointmentId}/status`, { statusId }, {
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const getWeekAppointments = (date?: string) => {
+  return axios.get<HttpResponse<GetWeekAppointmentsResponse[]>>(apiBaseUrl + `/admin/appointment/week`, {
+    params: date ? { date } : undefined,
+    headers: {
+      Authorization: getToken(),
+    }
+  })
+}
+
+export const getLastYearCustomerAppointments = () => {
+  return axios.get<HttpResponse<GetLastAppointmentsOutputDTO>>(apiBaseUrl + `/customer/appointment/last`, {
+    headers: {
+      Authorization: getToken(),
+    },
+  })
+}
+
+export const patchCustomerCancelAppointment = (appointmentId: number) => {
+  return axios.patch<HttpResponse>(apiBaseUrl + `/customer/appointment/${appointmentId}/cancel`, {}, {
+    headers: {
+      Authorization: getToken(),
+    },
+  })
+}
