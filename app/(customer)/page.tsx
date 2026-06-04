@@ -16,6 +16,8 @@ import {
   Select,
   Stack,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 type HourObj = GetAvailableHoursResponse['days'][number]['hours'][number];
@@ -37,6 +39,16 @@ export default function Home() {
   const [selectedBarberId, setSelectedBarberId] = useState<string>('');
   
   const [submitting, setSubmitting] = useState(false);
+
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error' | 'info' | 'warning';
+  }>({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
   const next7Days = useMemo(() => {
     const days = [];
@@ -109,11 +121,17 @@ export default function Home() {
     if (!selectedHour || !selectedBarberId) return;
     setSubmitting(true);
     try {
-      await postCreateAppointment({
+      const res = await postCreateAppointment({
         barberId: selectedBarberId,
         dateTime: new Date(selectedHour.datetime)
       });
-      alert("Agendamento criado com sucesso!");
+      
+      const successMsg = res.data?.message || 'Agendamento criado com sucesso!';
+      setSnackbar({
+        open: true,
+        message: successMsg,
+        severity: 'success'
+      });
 
       setSelectedDate('');
       setSelectedHour(null);
@@ -123,9 +141,24 @@ export default function Home() {
       if (newHoursRes.data?.data?.days) {
         setAvailableDays(newHoursRes.data.data.days);
       }
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
-      alert("Erro ao criar agendamento.");
+      
+      const axiosError = e as { response?: { data?: { message?: string | string[] } } };
+      const rawMessage = axiosError.response?.data?.message;
+      let errMsg = 'Erro ao criar agendamento.';
+      
+      if (typeof rawMessage === 'string') {
+        errMsg = rawMessage;
+      } else if (Array.isArray(rawMessage)) {
+        errMsg = rawMessage.join(', ');
+      }
+      
+      setSnackbar({
+        open: true,
+        message: errMsg,
+        severity: 'error'
+      });
     } finally {
       setSubmitting(false);
     }
@@ -278,6 +311,21 @@ export default function Home() {
           </Stack>
         )}
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%', borderRadius: 2 }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

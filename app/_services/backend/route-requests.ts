@@ -4,6 +4,7 @@ import {
   GetAllUsersParams,
   GetAllUsersResponse,
   GetAvailableHoursResponse,
+  GetLastAppointmentsOutputDTO,
   GetWeekAppointmentsResponse,
   PatchTurnUserIntoBarber,
   PostUserLoginBody,
@@ -85,5 +86,21 @@ export const getWeekAppointments = (date?: string) => {
     headers: {
       Authorization: getToken(),
     }
+  })
+}
+
+export const getLastYearCustomerAppointments = () => {
+  return axios.get<HttpResponse<GetLastAppointmentsOutputDTO>>(apiBaseUrl + `/customer/appointment/last`, {
+    headers: {
+      Authorization: getToken(),
+    },
+  })
+}
+
+export const patchCustomerCancelAppointment = (appointmentId: number) => {
+  return axios.patch<HttpResponse>(apiBaseUrl + `/customer/appointment/${appointmentId}/cancel`, {}, {
+    headers: {
+      Authorization: getToken(),
+    },
   })
 }

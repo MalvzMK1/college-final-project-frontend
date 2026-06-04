@@ -372,7 +372,7 @@ export default function Admin() {
           <CircularProgress color="primary" size={50} />
         </Box>
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} component="div">
           {weekDays.map((day) => {
             const dayAppointments = appointments.filter((appt) => {
               const apptDateStr = getAppointmentLocalDateString(appt.dateTime);
@@ -383,7 +383,7 @@ export default function Admin() {
             const isToday = getLocalDateString(new Date()) === day.dateString;
 
             return (
-              <Grid item xs={12} md={6} lg={4} key={day.dateString}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={day.dateString} component="div">
                 <Paper
                   elevation={0}
                   sx={{

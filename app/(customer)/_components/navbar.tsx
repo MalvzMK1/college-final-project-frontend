@@ -6,16 +6,17 @@ import {
   Logout as LogoutIcon
 } from "@mui/icons-material";
 import { AuthContext } from "@/app/_contexts";
-import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 type Pages = 'calendar' | 'history';
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { authLoaded, user, cleanToken } = useContext(AuthContext);
 
-  const [currentPage, setCurrentPage] = useState<Pages>('calendar');
+  const currentPage: Pages = pathname === '/historico' ? 'history' : 'calendar';
 
   const handleLogout = () => {
     cleanToken();
@@ -24,8 +25,6 @@ export default function Navbar() {
 
   const changePage = (destiny: Pages) => {
     if (destiny === currentPage) return;
-
-    setCurrentPage(destiny);
 
     let route = '';
 
@@ -42,7 +41,7 @@ export default function Navbar() {
     if (authLoaded && !user) {
       router.push('/login')
     }
-  }, [authLoaded, user])
+  }, [authLoaded, user, router])
 
   return (
     <AppBar
